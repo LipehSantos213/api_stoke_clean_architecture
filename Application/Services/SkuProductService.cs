@@ -1,7 +1,6 @@
 ﻿using api_stoke.Application.Exceptions;
 using api_stoke.Domain.Entities;
 using api_stoke.Domain.Interfaces;
-using System.Runtime.CompilerServices;
 
 namespace api_stoke.Application.Services
 {
@@ -12,19 +11,22 @@ namespace api_stoke.Application.Services
         private readonly ISkuMovementRepositories _skuMovementRepository;
         private readonly ISkuCartItemRepositories _skuCartItemRepository;
         private readonly ICartItemRepositories _cartItemRepository;
+        private readonly IProductRepositories _productRepository;
 
         public SkuProductService(
             ISkuProductRepositories repository,
             IMovementRepositories movementRepository,
             ISkuMovementRepositories skuMovementRepository,
             ISkuCartItemRepositories skuCartItemRepository,
-            ICartItemRepositories cartItemRepository)
+            ICartItemRepositories cartItemRepository,
+            IProductRepositories productRepository)
         {
             _repository = repository;
             _movementRepository = movementRepository;
             _skuMovementRepository = skuMovementRepository;
             _skuCartItemRepository = skuCartItemRepository;
             _cartItemRepository = cartItemRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<SkuProduct> GetSku(Guid skuId)
@@ -101,6 +103,38 @@ namespace api_stoke.Application.Services
                 await _skuMovementRepository.Create(skuMovement);
 
             }
+            return movement;
+        }
+
+        public async Task<Movement> RemoveSkusOfProduct(Product product, List<SkuProduct> skus, string observation)
+        {
+            Movement movement = new("SAIDA", skus.Count, observation,"USUARIO");
+            await _movementRepository.Create(movement);
+
+            int sub = 0;
+            foreach(SkuProduct sp in skus)
+            {
+                try
+                {
+                    sp.SetStatusSku(false);
+                }
+                catch (ConflictException)
+                {
+                    sub++;
+                    continue;
+                }
+                await _repository.Update(sp);
+                SkuMovement skuMovem = new(sp.Id, movement.Id);
+                await _skuMovementRepository.Create(skuMovem);
+            }
+            if(sub != 0)
+            {
+                movement.SetAmount(sub, toAdd:false);
+                await _movementRepository.Update(movement);
+            }
+
+            product.SubtraAmount(skus.Count - sub);
+            await _productRepository.Update(product);
             return movement;
         }
 
