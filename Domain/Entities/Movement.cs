@@ -67,5 +67,18 @@ namespace api_stoke.Domain.Entities
                 throw new UnprocessableException("Usuario invalido !");
             }
         }
+    
+        public void SetAmount(int amount, bool toAdd = true)
+        {
+            if(amount <= 0)
+            {
+                throw new UnprocessableException("Quantidade invalida !");
+            }
+
+            if (toAdd)
+                Amount += amount;
+            else
+                Amount -= amount;
+        }
     }
 }

@@ -5,5 +5,6 @@ namespace api_stoke.Application.DTOs.Movements
     {
         public int Amount { get; set; }
         public string Observation { get; set; }
+        public List<string> Skus { get; set; } = new();
     }
 }

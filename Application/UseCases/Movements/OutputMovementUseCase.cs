@@ -1,4 +1,5 @@
 ﻿using api_stoke.Application.DTOs.Movements;
+using api_stoke.Application.Exceptions;
 using api_stoke.Application.Services;
 using api_stoke.Domain.Entities;
 using api_stoke.Domain.Interfaces;
@@ -7,39 +8,37 @@ namespace api_stoke.Application.UseCases.Movements
 {
     public class OutputMovementUseCase
     {
-        private readonly IMovementRepositories _repository;
         private readonly ProductService _productService;
+        private readonly UserService _userService;
+        private readonly SkuProductService _skuProductService;
 
         public OutputMovementUseCase(
-            IMovementRepositories repository,
-            ProductService productService)
+            ProductService productService,
+            UserService userService,
+            SkuProductService skuProductService)
         {
-            _repository = repository;
             _productService = productService;
+            _userService = userService;
+            _skuProductService = skuProductService;
         }
 
-        public async Task<(Movement, Product)> Execute(Guid userId, Guid productId, RegisterMovementDTO dto)
+        public async Task<ResponseMovementDTO> Execute(Guid userId, Guid productId, RegisterMovementDTO dto)
         {
-            // Busca o produto no banco e verifica se ele não é do usuario
-            var p = await _productService.GetProductById(productId);
-            if (!(p.UserId.Equals(userId)))
-                throw new Exception("Não autorizado !");
+            User user = await _userService.FindUser(userId);
+            Product p = await _productService.GetProductById(productId);
+            if (p.UserId != userId)
+                throw new UnauthorizedAccessException("Ação não autorizada !");
 
-            // Cria uma instancia de Movement
-            Movement movem = new Movement(
-                productId,
-                "SAIDA",
-                dto.Amount,
-                dto.Observation,
-                "USUARIO");
+            if (dto.Observation == null)
+                throw new UnprocessableException("Forneça a observação desse histórico de movimentação !");
+            if (dto.Skus.Count == 0)
+                throw new UnprocessableException("Forneça os skus do produto para serem removidos !");
 
-            // Registra no banco o Movement
-            var movement = await _repository.Create(movem);
+            List<SkuProduct> skus = await _skuProductService.ListSkuProductWithString(productId, dto.Skus);
 
-            // Retira a quantidade de produto no banco
-            var product = await _productService.OutputProductMovement(p, dto.Amount);
+            Movement movem = await _skuProductService.RemoveSkusOfProduct(p, skus, dto.Observation);
 
-            return (movement, product);
+            return ResponseMovementDTO.fromDomain(movem, false);
         }
     }
 }
