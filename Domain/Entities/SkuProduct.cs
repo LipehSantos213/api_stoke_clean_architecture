@@ -10,6 +10,7 @@ namespace api_stoke.Domain.Entities
         public Guid ProductId { get; private set; }
         public string Sku { get; private set; }
         public StatusSku Status { get; private set; }
+        public bool Active { get; private set; }
 
         public enum StatusSku
         {
@@ -29,6 +30,7 @@ namespace api_stoke.Domain.Entities
             Sku = sku;
             Id = id == Guid.Empty ? Guid.NewGuid() : id;
             Status = StatusSku.EM_ESTOQUE;
+            Active = true;
         }
 
         public static string ToGenerateSku(string lastSku, string nameProduct)
@@ -87,6 +89,17 @@ namespace api_stoke.Domain.Entities
             }
 
             Status = status;
+        }
+    
+        public void SetStatusSku(bool value)
+        {
+            if(Active == value)
+            {
+                string status = value ? "ativado" : "desativado";
+                throw new ConflictException($"O sku já esta {status} !");
+            }
+
+            Active = value;
         }
     }
 }
