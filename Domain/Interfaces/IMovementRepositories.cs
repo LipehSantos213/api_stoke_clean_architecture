@@ -7,5 +7,7 @@ namespace api_stoke.Domain.Interfaces
         Task<Movement> Create(Movement movement);
 
         Task<Movement?> Get(Guid id);
+
+        Task<Movement> Update(Movement movement);
     }
 }
