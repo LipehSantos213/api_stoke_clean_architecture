@@ -1,0 +1,6 @@
+@api_stoke_HostAddress = http://localhost:5245
+
+GET {{api_stoke_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

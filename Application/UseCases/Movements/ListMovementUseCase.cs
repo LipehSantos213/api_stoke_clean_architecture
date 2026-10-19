@@ -1,0 +1,54 @@
+﻿using api_stoke.Application.DTOs.Movements;
+using api_stoke.Application.DTOs.Products;
+using api_stoke.Application.Services;
+
+namespace api_stoke.Application.UseCases.Movements
+{
+    public class ListMovementUseCase
+    {
+        private readonly ProductService _service;
+        private readonly UserService _userService;
+
+        public ListMovementUseCase(
+            ProductService service,
+            UserService userService)
+        {
+            _service = service;
+            _userService = userService;
+        }
+
+        public async Task<(ResponseProductDTO, List<ResponseMovementDTO>)> Execute(Guid userId, Guid productId, string? movement)
+        {
+            // Verificar se a Query Param enviado pelo usuario é valida
+            if (!movement!.Equals(null) && !movement.Equals("ENTRADA") && !movement.Equals("SAIDA"))
+                throw new Exception("Query invalida !");
+
+            // Buscar o usuario
+            var user = await _userService.FindUser(userId);
+
+            // Buscando o produto no banco
+            var product = await _service.GetProductById(productId);
+            var responseProduct = ResponseProductDTO.fromDomain(product, true);
+
+            // Verificar se o produto pertence ao usuario
+            if (!(user.Id.Equals(product.UserId)))
+                throw new Exception("Não autorizado !");
+
+            switch (movement)
+            {
+                case "ENTRADA":
+                    return (
+                        responseProduct,
+                        await _service.ListInputMovement(productId));
+                case "SAIDA":
+                    return (
+                        responseProduct,
+                        await _service.ListOutputMovement(productId));
+                default:
+                    return (
+                        responseProduct,
+                        await _service.ListAllMovement(productId));
+            }
+        }
+    }
+}
