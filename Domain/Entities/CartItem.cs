@@ -18,7 +18,7 @@ namespace api_stoke.Domain.Entities
 
         public Cart Cart { get; private set; } = null!;
         public Product Product { get; private set; } = null!;
-        public SkuCartItem SkuCartItem { get; private set; } = null!;
+        public List<SkuCartItem> SkuCartItens { get; private set; } = null!;
 
         private CartItem() { }
 

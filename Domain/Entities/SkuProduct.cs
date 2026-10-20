@@ -22,6 +22,8 @@ namespace api_stoke.Domain.Entities
 
         public List<SkuMovement> SkuMovements { get; } = new()!;
 
+        public List<SkuCartItem> SkuCartItens { get; } = new()!;
+
         private SkuProduct() { }
 
         public SkuProduct(Guid productId, string sku, Guid id = default!)
