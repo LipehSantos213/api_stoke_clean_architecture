@@ -16,10 +16,6 @@ namespace api_stoke.Infrastructure.Data.Configurations
                 .HasColumnName("id")
                 .ValueGeneratedNever();
 
-            builder.Property(x => x.ProductId)
-                .HasColumnName("product_id")
-                .IsRequired();
-
             builder.Property(x => x.TypeMovement)
                 .HasColumnName("type_movement")
                 .HasMaxLength(20)
@@ -43,9 +39,14 @@ namespace api_stoke.Infrastructure.Data.Configurations
                 .HasColumnName("created_at")
                 .IsRequired();
 
-            builder.HasOne(m => m.Product)
-                .WithMany(p => p.Movements)
-                .HasForeignKey(p => p.ProductId)
+            builder.HasMany(m => m.SkuMovements)
+                .WithOne(sm => sm.Movement)
+                .HasForeignKey(sm => sm.MovementId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(m => m.RegistrationClient)
+                .WithOne(rc => rc.Movement)
+                .HasForeignKey<RegistrationClients>(rc=> rc.MovementId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

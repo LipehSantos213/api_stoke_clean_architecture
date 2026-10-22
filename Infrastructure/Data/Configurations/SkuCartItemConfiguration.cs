@@ -42,6 +42,12 @@ namespace api_stoke.Infrastructure.Data.Configurations
                 .WithMany(sk => sk.SkuCartItens)
                 .HasForeignKey(s => s.SkuId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(s => new
+            {
+                s.CartItemId,
+                s.SkuId
+            }).IsUnique();
         }
     }
 }

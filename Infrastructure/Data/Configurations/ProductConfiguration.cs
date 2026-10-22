@@ -30,14 +30,6 @@ namespace api_stoke.Infrastructure.Data.Configurations
                 .HasMaxLength(200)
                 .IsRequired();
 
-            builder.Property(x => x.Sku)
-                .HasColumnName("sku")
-                .HasMaxLength(50)
-                .IsRequired();
-
-            builder.HasIndex(x => x.Sku)
-                .IsUnique();
-
             builder.Property(x => x.Price)
                 .HasColumnName("price")
                 .IsRequired();
@@ -63,9 +55,9 @@ namespace api_stoke.Infrastructure.Data.Configurations
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(p => p.Movements)
-                .WithOne(m => m.Product)
-                .HasForeignKey(m => m.ProductId)
+            builder.HasMany(p => p.Skus)
+                .WithOne(s => s.Product)
+                .HasForeignKey(s=>s.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(p => p.CartItens)

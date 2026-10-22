@@ -13,9 +13,9 @@ namespace api_stoke.Infrastructure.Data.Configurations
             builder.ToTable("registration_clients");
 
             builder.HasKey(x => x.Id);
-
             builder.Property(x => x.Id)
                 .HasColumnName("id")
+                .IsRequired()
                 .ValueGeneratedNever();
 
             builder.Property(x => x.PanelId)
@@ -25,28 +25,33 @@ namespace api_stoke.Infrastructure.Data.Configurations
             builder.Property(x => x.MovementId)
                 .HasColumnName("movement_id")
                 .IsRequired();
+            builder.HasIndex(x => x.MovementId)
+                .IsUnique();
 
             builder.Property(x => x.CartId)
                 .HasColumnName("cart_id")
                 .IsRequired();
 
-            builder.HasOne(x => x.Panel)
-                .WithMany(x => x.RegistrationClients)
-                .HasForeignKey(x => x.PanelId)
+            builder.HasOne(rc => rc.Panel)
+                .WithMany(p => p.RegistrationClients)
+                .HasForeignKey(rc => rc.PanelId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x => x.Movement)
-                .WithOne(x => x.RegistrationClient)
-                .HasForeignKey<RegistrationClients>(x => x.MovementId)
+            builder.HasOne(rc => rc.Movement)
+                .WithOne(m => m.RegistrationClient)
+                .HasForeignKey<RegistrationClients>(rc => rc.MovementId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x => x.Cart)
-                .WithMany(x => x.RegistrationClients)
-                .HasForeignKey(x => x.CartId)
+            builder.HasOne(rc => rc.Cart)
+                .WithMany(c => c.RegistrationClients)
+                .HasForeignKey(rc => rc.CartId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(x => x.MovementId)
-                .IsUnique();
+            builder.HasIndex(rc => new
+            {
+                rc.PanelId,
+                rc.CartId
+            });
         }
     }
 }

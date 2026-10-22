@@ -37,7 +37,12 @@ namespace api_stoke.Infrastructure.Data.Configurations
                 .WithMany(m => m.SkuMovements)
                 .HasForeignKey(s => s.MovementId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
+            builder.HasIndex(s => new 
+            {
+                s.SkuProductId,
+                s.MovementId
+            }).IsUnique();
         }
     }
 }
