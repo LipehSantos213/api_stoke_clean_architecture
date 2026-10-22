@@ -21,6 +21,17 @@ namespace api_stoke.Infrastructure.Repositories
             return ( await Get(item.Id) )!;
         }
 
+        public async Task<CartItem> Update(CartItem item)
+        {
+            await _appContext.CartItens.Where(ci => ci.Id == item.Id).ExecuteUpdateAsync(ci=>
+                ci.SetProperty(i=> i.Amount, item.Amount)
+                .SetProperty(i=>i.Price, item.Price)
+                .SetProperty(i=>i.PriceTotal, item.PriceTotal)
+                .SetProperty(i=>i.UpdatedAt, item.UpdatedAt)
+                .SetProperty(i=>i.Active, item.Active));
+            return (await Get(item.Id))!;
+        }
+
         public async Task<CartItem?> Get(Guid id)
         {
             return await
