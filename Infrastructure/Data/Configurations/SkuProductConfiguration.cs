@@ -51,8 +51,7 @@ namespace api_stoke.Infrastructure.Data.Configurations
             builder.HasMany(s => s.SkuMovements)
                 .WithOne(m=>m.SkuProduct).
                 HasForeignKey(m=>m.SkuProductId).
-                OnDelete(DeleteBehavior.Restrict); // Se esse SKU for deletado
-                                                  // como fica m.SkuProduct
+                OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

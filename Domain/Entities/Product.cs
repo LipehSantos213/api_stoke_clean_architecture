@@ -6,27 +6,20 @@
         public Guid UserId { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
-        //public string Sku { get; private set; }
         public int Price { get; private set; } // Centavos
         public int Amount { get; private set; } // Quantidade
         public bool Active { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
-
-        public List<Movement> Movements { get; private set; } = new()!;
         public List<CartItem> CartItens { get; private set; } = new()!;
-
         public List<SkuProduct> Skus { get; private set; } = new()!;
-
         public User User { get; private set; } = null!;
 
-        // Construtor privado para o EF Core
         private Product() { }
 
         public Product(
             string name,
             string description,
-            //string sku,
             int price,
             int amount,
             Guid id = default!,
@@ -48,7 +41,6 @@
             CreatedAt = createdAt == DateTime.MinValue ? DateTime.UtcNow : createdAt;
             UpdatedAt = updatedAt == DateTime.MinValue ? DateTime.UtcNow : updatedAt;
             User = user;
-
         }
 
         private void Validate(string name, string description,int price)
