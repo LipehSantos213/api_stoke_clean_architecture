@@ -27,5 +27,12 @@ namespace api_stoke.Infrastructure.Repositories
                 await _appContext.Movements
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
+
+        public async Task<Movement> Update(Movement movement)
+        {
+            await _appContext.Movements.Where(m => m.Id == movement.Id).ExecuteUpdateAsync(m=> 
+                m.SetProperty(i=> i.Amount, movement.Amount));
+            return (await Get(movement.Id))!;
+        }
     }
 }

@@ -23,6 +23,12 @@ namespace api_stoke.Infrastructure.Repositories
             return ( await GetCartOfUser(cart.UserId) )!;
         }
 
+        public async Task<Cart?> Get(Guid id)
+        {
+            return await _appContext.Carts.Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Cart?> GetCartOfUser(Guid userId)
         {
             return await 
