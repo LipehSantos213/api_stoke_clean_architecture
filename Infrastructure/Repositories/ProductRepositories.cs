@@ -64,30 +64,5 @@ namespace api_stoke.Infrastructure.Repositories
                 .Where(p=> p.UserId == userId && p.Amount <= stokeMin).ToListAsync();
             return products;
         }
-
-        public async Task<List<Movement>?> GetInputMovement(Guid id)
-        {
-            var movements = await 
-                _appContext.Movements
-                .Where(m => m.ProductId == id && m.TypeMovement == "ENTRADA")
-                .ToListAsync();
-            return movements;
-        }
-
-        public async Task<List<Movement>?> GetOutputMovement(Guid id)
-        {
-            var movements = await _appContext.Movements.Where(m=> m.ProductId == id && m.TypeMovement == "SAIDA")
-                .ToListAsync();
-            return movements;
-        }
-
-        public async Task<List<Movement>?> GetAllMovement(Guid id)
-        {
-            var movements = await _appContext.Movements
-                .Where(m=> m.ProductId == id)
-                .ToListAsync();
-            return movements;
-        }
-
     }
 }
