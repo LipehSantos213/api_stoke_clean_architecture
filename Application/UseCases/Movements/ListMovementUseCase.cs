@@ -1,5 +1,6 @@
 ﻿using api_stoke.Application.DTOs.Movements;
 using api_stoke.Application.DTOs.Products;
+using api_stoke.Application.Exceptions;
 using api_stoke.Application.Services;
 
 namespace api_stoke.Application.UseCases.Movements
@@ -23,8 +24,8 @@ namespace api_stoke.Application.UseCases.Movements
         public async Task<(ResponseProductDTO, List<ResponseMovementDTO>)> Execute(Guid userId, Guid productId, string? movement)
         {
             // Verificar se a Query Param enviado pelo usuario é valida
-            if (!movement!.Equals(null) && !movement.Equals("ENTRADA") && !movement.Equals("SAIDA"))
-                throw new Exception("Query invalida !");
+            if(movement != null && movement != "ENTRADA" && movement != "ENTRADA")
+                throw new UnprocessableException("Query invalida !");
 
             // Buscar o usuario
             var user = await _userService.FindUser(userId);
@@ -35,7 +36,7 @@ namespace api_stoke.Application.UseCases.Movements
 
             // Verificar se o produto pertence ao usuario
             if (!(user.Id.Equals(product.UserId)))
-                throw new Exception("Não autorizado !");
+                throw new UnauthorizedException("Não autorizado !");
 
             switch (movement)
             {

@@ -1,4 +1,5 @@
-﻿using api_stoke.Domain.Entities;
+﻿using api_stoke.Application.Exceptions;
+using api_stoke.Domain.Entities;
 using api_stoke.Domain.Interfaces;
 
 namespace api_stoke.Application.Services
@@ -15,7 +16,7 @@ namespace api_stoke.Application.Services
         public async Task<Product> GetProductById(Guid id)
         {
             Product product = await _repository.Get(id) ?? 
-                throw new Exception("Produto não encontrado !");
+                throw new NotFoundException("Produto não encontrado !");
             return product;
         }
 
