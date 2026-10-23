@@ -33,7 +33,6 @@ namespace api_stoke.Infrastructure.Repositories
             await _appContext.Products.Where(p => p.Id == product.Id).ExecuteUpdateAsync(p=> p
             .SetProperty(p=>p.Name, product.Name)
             .SetProperty(p=>p.Description, product.Description)
-            .SetProperty(p=>p.Sku, product.Sku)
             .SetProperty(p=>p.Price, product.Price)
             .SetProperty(p=>p.Amount, product.Amount)
             .SetProperty(p=>p.Active, product.Active)
@@ -42,12 +41,12 @@ namespace api_stoke.Infrastructure.Repositories
             return ( await Get(product.Id) )!;
         }
 
-        public async Task<Product?> GetSku(string sku)
-        {
-            var product = await 
-                _appContext.Products.Where(p=>p.Sku == sku).FirstAsync();
-            return product;
-        }
+        //public async Task<Product?> GetSku(string sku)
+        //{
+        //    var product = await 
+        //        _appContext.Products.Where(p=>p.Sku == sku).FirstAsync();
+        //    return product;
+        //}
 
         public async Task<List<Product>?> GetName(Guid userId, string name)
         {
