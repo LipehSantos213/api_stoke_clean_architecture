@@ -41,13 +41,6 @@ namespace api_stoke.Infrastructure.Repositories
             return ( await Get(product.Id) )!;
         }
 
-        //public async Task<Product?> GetSku(string sku)
-        //{
-        //    var product = await 
-        //        _appContext.Products.Where(p=>p.Sku == sku).FirstAsync();
-        //    return product;
-        //}
-
         public async Task<List<Product>?> GetName(Guid userId, string name)
         {
             var products = await 
