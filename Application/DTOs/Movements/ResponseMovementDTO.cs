@@ -1,4 +1,5 @@
 ﻿using api_stoke.Application.DTOs.Products;
+using api_stoke.Application.DTOs.SkuProducts;
 using api_stoke.Domain.Entities;
 
 namespace api_stoke.Application.DTOs.Movements
@@ -12,7 +13,18 @@ namespace api_stoke.Application.DTOs.Movements
         public string User { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public static ResponseMovementDTO fromDomain(Movement movement)
+        public ResponseProductDTO? Product { get; set; } = null!;
+        public List<ResponseSkuProductDTO>? Skus { get; set; } = null!;
+
+        public Guid? UserSallerId { get; set; }
+        public Guid? UserClientId { get; set; }
+            
+        public static ResponseMovementDTO fromDomain(
+                Movement movement,
+                ResponseProductDTO product = null!,
+                List<ResponseSkuProductDTO> skus = null!,
+                Guid? userSallerId = null,
+                Guid? userClientId = null)
         {
             return new ResponseMovementDTO
             {
@@ -22,6 +34,10 @@ namespace api_stoke.Application.DTOs.Movements
                 TypeMovement = movement.TypeMovement,
                 User = movement.User,
                 CreatedAt = movement.CreatedAt,
+                Product = product,
+                Skus = skus,
+                UserSallerId = userSallerId,
+                UserClientId = userClientId
             };
         }
     }
