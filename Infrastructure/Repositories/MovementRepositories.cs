@@ -34,5 +34,29 @@ namespace api_stoke.Infrastructure.Repositories
                 m.SetProperty(i=> i.Amount, movement.Amount));
             return (await Get(movement.Id))!;
         }
+
+        public async Task<List<Movement>?> GetInputMovement(Guid productId)
+        {
+            return await
+                _appContext.Movements.SelectMany(m=> m.SkuMovements)
+                .Where(sm=>sm.SkuProduct.ProductId == productId).Select(sm=>sm.Movement).
+                Where(m=>m.TypeMovement == "ENTRADA").ToListAsync();
+        }
+
+        public async Task<List<Movement>?> GetOutputMovement(Guid productId)
+        {
+            return await
+                _appContext.Movements.SelectMany(m => m.SkuMovements)
+                .Where(sm => sm.SkuProduct.ProductId == productId).Select(sm => sm.Movement).
+                Where(m => m.TypeMovement == "SAIDA").ToListAsync();
+        }
+
+        public async Task<List<Movement>?> GetAllMovement(Guid productId)
+        {
+            return await
+                _appContext.Movements.SelectMany(m => m.SkuMovements)
+                .Where(sm => sm.SkuProduct.ProductId == productId).Select(sm => sm.Movement)
+                .ToListAsync();
+        }
     }
 }

@@ -6,15 +6,18 @@ namespace api_stoke.Application.UseCases.Movements
 {
     public class ListMovementUseCase
     {
-        private readonly ProductService _service;
+        private readonly MovementService _service;
         private readonly UserService _userService;
+        private readonly ProductService _productService;
 
         public ListMovementUseCase(
-            ProductService service,
-            UserService userService)
+            MovementService service,
+            UserService userService,
+            ProductService productService)
         {
             _service = service;
             _userService = userService;
+            _productService = productService;
         }
 
         public async Task<(ResponseProductDTO, List<ResponseMovementDTO>)> Execute(Guid userId, Guid productId, string? movement)
@@ -27,7 +30,7 @@ namespace api_stoke.Application.UseCases.Movements
             var user = await _userService.FindUser(userId);
 
             // Buscando o produto no banco
-            var product = await _service.GetProductById(productId);
+            var product = await _productService.GetProductById(productId);
             var responseProduct = ResponseProductDTO.fromDomain(product, true);
 
             // Verificar se o produto pertence ao usuario
