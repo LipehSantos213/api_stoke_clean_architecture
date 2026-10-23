@@ -8,14 +8,8 @@ namespace api_stoke.Domain.Interfaces
         Task<Product> Update(Product product);
         Task<Product?> Get(Guid id);
 
-        Task<Product?> GetSku(string sku);
-
         Task<List<Product>?> GetName(Guid userId, string name);
         Task<List<Product>?> GetStatus(Guid userId, bool value);
         Task<List<Product>?> GetStokeMin(Guid userId, int stokeMin);
-
-        Task<List<Movement>?> GetInputMovement(Guid id);
-        Task<List<Movement>?> GetOutputMovement(Guid id);
-        Task<List<Movement>?> GetAllMovement(Guid id);
     }
 }

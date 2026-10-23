@@ -41,7 +41,7 @@ namespace api_stoke.Application.UseCases.Movements
 
             Movement m = await _skuProductService.AddSkusOfProduct(productId, product.Name, dto.Amount);
 
-            return ResponseMovementDTO.fromDomain(m, false);
+            return ResponseMovementDTO.fromDomain(m);
         }
     }
 }

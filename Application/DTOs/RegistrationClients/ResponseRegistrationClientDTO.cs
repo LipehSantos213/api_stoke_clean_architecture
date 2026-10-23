@@ -17,7 +17,7 @@ namespace api_stoke.Application.DTOs.RegistrationClients
             {
                 Id = idRegistrationClient,
 
-                Movement = ResponseMovementDTO.fromDomain(movement, false),
+                Movement = ResponseMovementDTO.fromDomain(movement),
                 UserSaller = ResponseUserDTO.fromDomain(saller),
                 UserClient = ResponseUserDTO.fromDomain(client)
             };

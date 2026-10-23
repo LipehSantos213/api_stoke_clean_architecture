@@ -33,20 +33,12 @@ namespace api_stoke.Infrastructure.Repositories
             await _appContext.Products.Where(p => p.Id == product.Id).ExecuteUpdateAsync(p=> p
             .SetProperty(p=>p.Name, product.Name)
             .SetProperty(p=>p.Description, product.Description)
-            .SetProperty(p=>p.Sku, product.Sku)
             .SetProperty(p=>p.Price, product.Price)
             .SetProperty(p=>p.Amount, product.Amount)
             .SetProperty(p=>p.Active, product.Active)
             .SetProperty(p=>p.UpdatedAt, product.UpdatedAt)
             );
             return ( await Get(product.Id) )!;
-        }
-
-        public async Task<Product?> GetSku(string sku)
-        {
-            var product = await 
-                _appContext.Products.Where(p=>p.Sku == sku).FirstAsync();
-            return product;
         }
 
         public async Task<List<Product>?> GetName(Guid userId, string name)
@@ -72,30 +64,5 @@ namespace api_stoke.Infrastructure.Repositories
                 .Where(p=> p.UserId == userId && p.Amount <= stokeMin).ToListAsync();
             return products;
         }
-
-        public async Task<List<Movement>?> GetInputMovement(Guid id)
-        {
-            var movements = await 
-                _appContext.Movements
-                .Where(m => m.ProductId == id && m.TypeMovement == "ENTRADA")
-                .ToListAsync();
-            return movements;
-        }
-
-        public async Task<List<Movement>?> GetOutputMovement(Guid id)
-        {
-            var movements = await _appContext.Movements.Where(m=> m.ProductId == id && m.TypeMovement == "SAIDA")
-                .ToListAsync();
-            return movements;
-        }
-
-        public async Task<List<Movement>?> GetAllMovement(Guid id)
-        {
-            var movements = await _appContext.Movements
-                .Where(m=> m.ProductId == id)
-                .ToListAsync();
-            return movements;
-        }
-
     }
 }
