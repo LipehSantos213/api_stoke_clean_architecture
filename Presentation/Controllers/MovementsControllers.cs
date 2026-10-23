@@ -32,8 +32,8 @@ namespace api_stoke.Presentation.Controllers
         [HttpPost("output")]
         public async Task<IActionResult> Output([FromRoute] Guid userId, [FromRoute] Guid id, [FromBody] RegisterMovementDTO dto)
         {
-            var res = await _outputMovementUseCase.Execute(userId, id, dto);
-            return Ok(new { res.Item1, res.Item2 });
+            ResponseMovementDTO res = await _outputMovementUseCase.Execute(userId, id, dto);
+            return Ok(res);
         }
 
         [HttpGet]
