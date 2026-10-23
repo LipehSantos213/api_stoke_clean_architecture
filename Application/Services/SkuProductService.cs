@@ -64,8 +64,6 @@ namespace api_stoke.Application.Services
 
         public async Task<Movement> AddSkusOfProduct(Guid productId, string nameProduct, int amount, string observMovement = null!)
         {
-            //List<SkuProduct> response = new();
-
             // Criar um instancia do movimentação do produto
             string observation = observMovement == null? $"{amount} unidade de {nameProduct} adicionadas !!!" : observMovement;
             Movement movement = new("ENTRADA", amount, observation, "USUARIO");
@@ -78,7 +76,7 @@ namespace api_stoke.Application.Services
             for (int i = 0; i < amount; i++)
             {
                 // Buscar o ultimo Sku do produto adicionado no banco
-                string? lastSku = (await _repository.GetLastSku(productId)).Sku;
+                SkuProduct? lastSku = await _repository.GetLastSku(productId);
 
                 // Verificação: se o produto não tiver sku, chama metodo para criar 
                 // o primeiro Sku do produto, se ele tiver, cria uma nova Sku com base no
@@ -87,12 +85,10 @@ namespace api_stoke.Application.Services
                     // criar primeiro sku
                     SkuProduct.FirstSku(nameProduct): 
                     // Criar Sku com base no ultimo sku do produto
-                    SkuProduct.ToGenerateSku(lastSku, nameProduct);
+                    SkuProduct.ToGenerateSku(lastSku.Sku, nameProduct);
 
                 // Criar instancia do Sku do produto
                 SkuProduct skuObj = new SkuProduct(productId, sku);
-
-                //response.Add(skuObj);
 
                 // Criar Sku do produto no banco
                 await _repository.Create(skuObj);
@@ -101,7 +97,6 @@ namespace api_stoke.Application.Services
                 SkuMovement skuMovement = new(skuObj.Id, movement.Id);
                 // Criando ela no banco
                 await _skuMovementRepository.Create(skuMovement);
-
             }
             return movement;
         }
