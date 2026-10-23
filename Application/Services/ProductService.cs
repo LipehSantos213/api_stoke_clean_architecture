@@ -41,7 +41,7 @@ namespace api_stoke.Application.Services
         private List<ResponseMovementDTO> ResponseMovements(List<Movement> movements)
         {
             List<ResponseMovementDTO> response = new();
-            movements.ForEach(m => response.Add(ResponseMovementDTO.fromDomain(m, false)));
+            movements.ForEach(m => response.Add(ResponseMovementDTO.fromDomain(m)));
             return response;
         }
 

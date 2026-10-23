@@ -38,7 +38,7 @@ namespace api_stoke.Application.UseCases.Movements
 
             Movement movem = await _skuProductService.RemoveSkusOfProduct(p, skus, dto.Observation);
 
-            return ResponseMovementDTO.fromDomain(movem, false);
+            return ResponseMovementDTO.fromDomain(movem);
         }
     }
 }
