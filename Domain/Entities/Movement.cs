@@ -11,7 +11,7 @@ namespace api_stoke.Domain.Entities
         public string User { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public List<SkuMovement> SkuMovements { get; } = new()!;
-        public RegistrationClients RegistrationClient { get; } = null!;
+        public RegistrationClients? RegistrationClient { get; } = null!;
 
         private Movement() { }
 

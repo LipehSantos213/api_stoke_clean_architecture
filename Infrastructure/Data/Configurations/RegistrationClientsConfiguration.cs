@@ -40,6 +40,7 @@ namespace api_stoke.Infrastructure.Data.Configurations
             builder.HasOne(rc => rc.Movement)
                 .WithOne(m => m.RegistrationClient)
                 .HasForeignKey<RegistrationClients>(rc => rc.MovementId)
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(rc => rc.Cart)

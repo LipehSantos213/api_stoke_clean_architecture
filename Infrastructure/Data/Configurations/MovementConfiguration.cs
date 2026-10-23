@@ -47,6 +47,7 @@ namespace api_stoke.Infrastructure.Data.Configurations
             builder.HasOne(m => m.RegistrationClient)
                 .WithOne(rc => rc.Movement)
                 .HasForeignKey<RegistrationClients>(rc=> rc.MovementId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
