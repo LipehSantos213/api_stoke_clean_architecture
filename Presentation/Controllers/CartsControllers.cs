@@ -36,10 +36,12 @@ namespace api_stoke.Presentation.Controllers
             return Ok("Produto adicionado !");
         }
 
-        [HttpDelete("products/{productId:guid}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid userId, [FromRoute] Guid productId)
+        [HttpDelete("products")]
+        public async Task<IActionResult> Delete(
+            [FromRoute] Guid userId, 
+            [FromBody] AddProductCartDTO dto)
         {
-            await _removeProductCartUseCase.Execute(userId, productId);
+            await _removeProductCartUseCase.Execute(userId, dto);
             return Ok("Product removido do carrinho !");
         }
     }
