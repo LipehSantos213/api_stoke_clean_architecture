@@ -58,6 +58,9 @@ namespace api_stoke.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("Amount")
                         .HasColumnType("integer")
                         .HasColumnName("amount");
@@ -74,9 +77,15 @@ namespace api_stoke.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("price");
 
+                    b.Property<int>("PriceTotal")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -108,10 +117,6 @@ namespace api_stoke.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("observation");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("product_id");
-
                     b.Property<string>("TypeMovement")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -125,8 +130,6 @@ namespace api_stoke.Migrations
                         .HasColumnName("user");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("movements", (string)null);
                 });
@@ -195,12 +198,6 @@ namespace api_stoke.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("price");
 
-                    b.Property<string>("Sku")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("sku");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -210,9 +207,6 @@ namespace api_stoke.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Sku")
-                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -244,9 +238,101 @@ namespace api_stoke.Migrations
                     b.HasIndex("MovementId")
                         .IsUnique();
 
-                    b.HasIndex("PanelId");
+                    b.HasIndex("PanelId", "CartId");
 
                     b.ToTable("registration_clients", (string)null);
+                });
+
+            modelBuilder.Entity("api_stoke.Domain.Entities.SkuCartItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean")
+                        .HasColumnName("active");
+
+                    b.Property<Guid>("CartItemId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cart_item_id");
+
+                    b.Property<Guid>("SkuId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("sku_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SkuId");
+
+                    b.HasIndex("CartItemId", "SkuId")
+                        .IsUnique();
+
+                    b.ToTable("sku_cart_item", (string)null);
+                });
+
+            modelBuilder.Entity("api_stoke.Domain.Entities.SkuMovement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("MovementId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("movement_id");
+
+                    b.Property<Guid>("SkuProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("sku_product_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovementId");
+
+                    b.HasIndex("SkuProductId", "MovementId")
+                        .IsUnique();
+
+                    b.ToTable("sku_movement", (string)null);
+                });
+
+            modelBuilder.Entity("api_stoke.Domain.Entities.SkuProduct", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean")
+                        .HasColumnName("active");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("sku");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("character varying(12)")
+                        .HasColumnName("status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("Sku")
+                        .IsUnique();
+
+                    b.ToTable("sku_products", (string)null);
                 });
 
             modelBuilder.Entity("api_stoke.Domain.Entities.User", b =>
@@ -328,17 +414,6 @@ namespace api_stoke.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("api_stoke.Domain.Entities.Movement", b =>
-                {
-                    b.HasOne("api_stoke.Domain.Entities.Product", "Product")
-                        .WithMany("Movements")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("api_stoke.Domain.Entities.Panel", b =>
                 {
                     b.HasOne("api_stoke.Domain.Entities.User", "User")
@@ -388,6 +463,55 @@ namespace api_stoke.Migrations
                     b.Navigation("Panel");
                 });
 
+            modelBuilder.Entity("api_stoke.Domain.Entities.SkuCartItem", b =>
+                {
+                    b.HasOne("api_stoke.Domain.Entities.CartItem", "CartItem")
+                        .WithMany("SkuCartItens")
+                        .HasForeignKey("CartItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("api_stoke.Domain.Entities.SkuProduct", "SkuProduct")
+                        .WithMany("SkuCartItens")
+                        .HasForeignKey("SkuId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CartItem");
+
+                    b.Navigation("SkuProduct");
+                });
+
+            modelBuilder.Entity("api_stoke.Domain.Entities.SkuMovement", b =>
+                {
+                    b.HasOne("api_stoke.Domain.Entities.Movement", "Movement")
+                        .WithMany("SkuMovements")
+                        .HasForeignKey("MovementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("api_stoke.Domain.Entities.SkuProduct", "SkuProduct")
+                        .WithMany("SkuMovements")
+                        .HasForeignKey("SkuProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Movement");
+
+                    b.Navigation("SkuProduct");
+                });
+
+            modelBuilder.Entity("api_stoke.Domain.Entities.SkuProduct", b =>
+                {
+                    b.HasOne("api_stoke.Domain.Entities.Product", "Product")
+                        .WithMany("Skus")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("api_stoke.Domain.Entities.Cart", b =>
                 {
                     b.Navigation("CartItens");
@@ -395,10 +519,16 @@ namespace api_stoke.Migrations
                     b.Navigation("RegistrationClients");
                 });
 
+            modelBuilder.Entity("api_stoke.Domain.Entities.CartItem", b =>
+                {
+                    b.Navigation("SkuCartItens");
+                });
+
             modelBuilder.Entity("api_stoke.Domain.Entities.Movement", b =>
                 {
-                    b.Navigation("RegistrationClient")
-                        .IsRequired();
+                    b.Navigation("RegistrationClient");
+
+                    b.Navigation("SkuMovements");
                 });
 
             modelBuilder.Entity("api_stoke.Domain.Entities.Panel", b =>
@@ -410,7 +540,14 @@ namespace api_stoke.Migrations
                 {
                     b.Navigation("CartItens");
 
-                    b.Navigation("Movements");
+                    b.Navigation("Skus");
+                });
+
+            modelBuilder.Entity("api_stoke.Domain.Entities.SkuProduct", b =>
+                {
+                    b.Navigation("SkuCartItens");
+
+                    b.Navigation("SkuMovements");
                 });
 
             modelBuilder.Entity("api_stoke.Domain.Entities.User", b =>

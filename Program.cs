@@ -31,6 +31,9 @@ builder.Services.AddScoped<IPanelRepositories, PanelRepositories>();
 builder.Services.AddScoped<IMovementRepositories, MovementRepositories>();
 builder.Services.AddScoped<ICartRepositories, CartRepositories>();
 builder.Services.AddScoped<ICartItemRepositories, CartItemRepositories>();
+builder.Services.AddScoped<ISkuCartItemRepositories, SkuCartItemRepositories>();
+builder.Services.AddScoped<ISkuMovementRepositories, SkuMovementRepositories>();
+builder.Services.AddScoped<ISkuProductRepositories, SkuProductRepositories>();
 
 // ================== UseCases ==================
 // UserUseCases
@@ -67,6 +70,7 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<PanelService>();
 builder.Services.AddScoped<MovementService>();
 builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped<SkuProductService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
