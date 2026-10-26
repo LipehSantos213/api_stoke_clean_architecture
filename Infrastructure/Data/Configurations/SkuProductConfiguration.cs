@@ -41,6 +41,11 @@ namespace api_stoke.Infrastructure.Data.Configurations
                 .HasMaxLength(12)
                 .IsRequired();
 
+            // CreatedAt
+            builder.Property(s => s.CreatedAt)
+                .HasColumnName("created_at")
+                .IsRequired();
+
             // SkuProduct -> Product
             builder.HasOne(s => s.Product)
                 .WithMany(p => p.Skus)
