@@ -12,8 +12,6 @@ namespace api_stoke.Domain.Interfaces
 
         Task<SkuProduct?> GetById(Guid id);
 
-        Task<List<SkuProduct>?> GetAllByProductId(Guid productId);
-
         Task<SkuProduct?> GetLastSku(Guid productId);
     }
 }

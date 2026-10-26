@@ -22,6 +22,9 @@ namespace api_stoke.Infrastructure.Data.Context
         public DbSet<RegistrationClients> RegistrationClients { get; set; } = null!;
 
         public DbSet<CartItem> CartItens { get; set; } = null!;
+        public DbSet<SkuProduct> SkuProducts { get; set; } = null!;
+        public DbSet<SkuMovement> SkuMovements { get; set; } = null!;
+        public DbSet<SkuCartItem> SkuCartItens { get; set; } = null!;
              
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -11,6 +11,7 @@ namespace api_stoke.Domain.Entities
         public string Sku { get; private set; }
         public StatusSku Status { get; private set; }
         public bool Active { get; private set; }
+        public DateTime CreatedAt { get; private set; }
 
         public enum StatusSku
         {
@@ -33,6 +34,7 @@ namespace api_stoke.Domain.Entities
             Id = id == Guid.Empty ? Guid.NewGuid() : id;
             Status = StatusSku.EM_ESTOQUE;
             Active = true;
+            CreatedAt = DateTime.UtcNow;
         }
 
         public static string ToGenerateSku(string lastSku, string nameProduct)

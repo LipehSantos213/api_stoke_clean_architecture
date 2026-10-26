@@ -43,11 +43,6 @@ namespace api_stoke.Application.Services
                 ?? await _cartItemRepository.Create(new(cartId, productId: productId));
         }
 
-        //public async Task<CartItem> GetCartItemById(Guid cartItemId)
-        //{
-        //    return await _cartItemRepository.Get(cartItemId) ??
-        //        throw new NotFoundException("Item do carrinho não encontrado !");
-        //}
 
         private async Task<List<SkuProduct>> ListSkuProductOfCartItem(Guid cartItemId)
         {
