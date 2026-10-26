@@ -12,7 +12,7 @@
 
         public User User { get; private set; } = null!; // Usuario desse Panel
 
-        public List<RegistrationClients> RegistrationClients { get; } = new();
+        public List<RegistrationClients>? RegistrationClients { get; } = new();
 
 
         private Panel() { }

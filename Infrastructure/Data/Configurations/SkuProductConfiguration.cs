@@ -50,13 +50,15 @@ namespace api_stoke.Infrastructure.Data.Configurations
             builder.HasOne(s => s.Product)
                 .WithMany(p => p.Skus)
                 .HasForeignKey(s => s.ProductId)
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
             // SkuProduct -> SkuMoements
             builder.HasMany(s => s.SkuMovements)
                 .WithOne(m=>m.SkuProduct).
-                HasForeignKey(m=>m.SkuProductId).
-                OnDelete(DeleteBehavior.Restrict);
+                HasForeignKey(m=>m.SkuProductId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
