@@ -10,8 +10,8 @@ namespace api_stoke.Domain.Entities
         public int Amount { get; private set; }
         public int PriceTotal { get; private set; }
 
-        public List<RegistrationClients> RegistrationClients { get; private set; } = new();
-        public List<CartItem> CartItens { get; private set; } = new();
+        public List<RegistrationClients>? RegistrationClients { get; private set; } = new();
+        public List<CartItem>? CartItens { get; private set; } = new();
 
         public DateTime UpdatedAt { get; private set; }
 

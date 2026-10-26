@@ -14,7 +14,7 @@ namespace api_stoke.Domain.Entities
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
-        public List<Product> Products { get; private set; } = new();
+        public List<Product>? Products { get; private set; } = new();
         public Panel Panel { get; } = null!;
         public Cart Cart { get; } = null!;
 

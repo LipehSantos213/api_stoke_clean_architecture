@@ -63,6 +63,7 @@ namespace api_stoke.Infrastructure.Data.Configurations
             builder.HasMany(p => p.CartItens)
                 .WithOne(ci => ci.Product)
                 .HasForeignKey(ci => ci.ProductId)
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -21,9 +21,9 @@ namespace api_stoke.Domain.Entities
 
         public Product Product { get; } = null!;
 
-        public List<SkuMovement> SkuMovements { get; } = new()!;
+        public List<SkuMovement>? SkuMovements { get; } = new()!;
 
-        public List<SkuCartItem> SkuCartItens { get; } = new()!;
+        public List<SkuCartItem>? SkuCartItens { get; } = new()!;
 
         private SkuProduct() { }
 

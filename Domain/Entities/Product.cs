@@ -11,7 +11,7 @@
         public bool Active { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
-        public List<CartItem> CartItens { get; private set; } = new()!;
+        public List<CartItem>? CartItens { get; private set; } = new()!;
         public List<SkuProduct> Skus { get; private set; } = new()!;
         public User User { get; private set; } = null!;
 

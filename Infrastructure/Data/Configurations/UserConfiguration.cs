@@ -60,9 +60,10 @@ namespace api_stoke.Infrastructure.Data.Configurations
                 .IsRequired();
 
             // User -> Products
-            builder.HasMany(x => x.Products)
-                .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId)
+            builder.HasMany(u => u.Products)
+                .WithOne(p => p.User)
+                .HasForeignKey(p => p.UserId)
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             // User -> Panel
