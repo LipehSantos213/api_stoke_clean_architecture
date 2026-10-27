@@ -92,7 +92,7 @@ namespace api_stoke.Application.UseCases.Products
             // Atualizar o Panel do vendedor com os novos dados
             await _panelRepository.Update(panelSeller);
 
-            return ResponseProductDTO.fromDomain(product, true);
+            return ResponseProductDTO.fromDomain(product);
         }
     }
 }

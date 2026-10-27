@@ -19,7 +19,7 @@ namespace api_stoke.Application.UseCases.Products
             var product = await _service.GetProductById(productId);
             if (product.UserId != userId)
                 throw new UnauthorizedAccessException("Não é possivel acessar !");
-            return ResponseProductDTO.fromDomain(product, true);
+            return ResponseProductDTO.fromDomain(product);
         }
     }
 }

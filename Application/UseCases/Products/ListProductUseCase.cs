@@ -17,7 +17,7 @@ namespace api_stoke.Application.UseCases.Products
         {
             foreach(var e in productsAdd)
             {
-                var p = ResponseProductDTO.fromDomain(e, false);
+                var p = ResponseProductDTO.fromDomain(e);
                 if(!products.Contains(p))
                     products.Add(p);
             }
