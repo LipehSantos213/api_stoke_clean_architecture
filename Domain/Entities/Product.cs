@@ -38,6 +38,7 @@
             //Sku = sku;
             Price = price;
             Amount = amount;
+            Active = true;
             CreatedAt = createdAt == DateTime.MinValue ? DateTime.UtcNow : createdAt;
             UpdatedAt = updatedAt == DateTime.MinValue ? DateTime.UtcNow : updatedAt;
             User = user;
