@@ -24,10 +24,10 @@ namespace api_stoke.Application.UseCases.Users
             User user = await _userService.FindUser(userId);
             if (user.Password != dto.CurrentPassword)
                 throw new UnauthorizedException("Não autorizado !");
-            var updated = user.UpdatePassword(dto.NewPassword);
+            var updated = user.UpdatePassword(dto.NewPassword.Trim());
             if (!updated)
-                throw new Exception("Nova senha invalida !");
-
+                throw new UnprocessableException("Nova senha invalida !");
+            await _repository.Update(user);
         }
     }
 }
