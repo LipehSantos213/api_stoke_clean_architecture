@@ -86,7 +86,7 @@ namespace api_stoke.Domain.Entities
     
         public bool UpdatePassword(string newPassword)
         {
-            if (Password == newPassword || newPassword.Length <=8 || newPassword.Length >=20)
+            if (Password == newPassword || newPassword.Length <8 || newPassword.Length >20)
                 return false;
             Password = newPassword;
             UpdatedAt = DateTime.UtcNow;
