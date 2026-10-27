@@ -1,6 +1,10 @@
 ﻿using api_stoke.Application.Exceptions;
 using api_stoke.Domain.Entities;
 using api_stoke.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using System.Runtime.CompilerServices;
+using System.Security;
 
 namespace api_stoke.Application.Services
 {
@@ -62,6 +66,24 @@ namespace api_stoke.Application.Services
             return skuProducts;
         }
 
+        private async Task<string> VerifySkuStringInDatabase(string checkSku, string nameProduct)
+        {
+            string sku = checkSku;
+
+            for (int i = 0; i < 10; i++)
+            {
+                SkuProduct? existsSku = await _repository.GetBySku(sku);
+
+                if (existsSku == null)
+                    return sku;
+
+                sku = SkuProduct.ToGenerateSku(sku, nameProduct);
+            }
+
+            throw new ConflictException(
+                "Não foi possível gerar um SKU disponível.");
+        }
+
         public async Task<Movement> AddSkusOfProduct(Guid productId, string nameProduct, int amount, string observMovement = null!)
         {
             // Criar um instancia do movimentação do produto
@@ -87,11 +109,29 @@ namespace api_stoke.Application.Services
                     // Criar Sku com base no ultimo sku do produto
                     SkuProduct.ToGenerateSku(lastSku.Sku, nameProduct);
 
-                // Criar instancia do Sku do produto
-                SkuProduct skuObj = new SkuProduct(productId, sku);
+                // Verificação antes de registrar o SKU no banco
+                string securitySku = await VerifySkuStringInDatabase(sku, nameProduct);
 
-                // Criar Sku do produto no banco
-                await _repository.Create(skuObj);
+                SkuProduct skuObj;
+                while (true)
+                {
+                    // Criar instancia do Sku do produto
+                    skuObj = new SkuProduct(productId, securitySku);
+                    try
+                    {
+                        // Criar Sku do produto no banco
+                        await _repository.Create(skuObj);
+                    }
+                    catch (DbUpdateException ex)
+                        when (ex.InnerException is PostgresException pgEx 
+                        && pgEx.SqlState == "23505" && pgEx.ConstraintName == "IX_sku_products_sku")
+                    {
+                        securitySku = SkuProduct.ToGenerateSku(securitySku, nameProduct);
+
+                        securitySku = await VerifySkuStringInDatabase(securitySku, nameProduct);
+                    }
+                    break;
+                }
 
                 // Criar instancia da relação do Sku com a movimentação do produto
                 SkuMovement skuMovement = new(skuObj.Id, movement.Id);

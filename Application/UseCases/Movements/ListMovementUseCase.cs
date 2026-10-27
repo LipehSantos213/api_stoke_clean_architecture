@@ -32,7 +32,7 @@ namespace api_stoke.Application.UseCases.Movements
 
             // Buscando o produto no banco
             var product = await _productService.GetProductById(productId);
-            var responseProduct = ResponseProductDTO.fromDomain(product, true);
+            var responseProduct = ResponseProductDTO.fromDomain(product, user);
 
             // Verificar se o produto pertence ao usuario
             if (!(user.Id.Equals(product.UserId)))

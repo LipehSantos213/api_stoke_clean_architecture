@@ -16,7 +16,7 @@ namespace api_stoke.Application.DTOs.Products
 
         public ResponseUserDTO? User = new();
 
-        public static ResponseProductDTO fromDomain(Product product, bool user)
+        public static ResponseProductDTO fromDomain(Product product, User? user = null)
         {
             return new ResponseProductDTO
             {
@@ -28,7 +28,7 @@ namespace api_stoke.Application.DTOs.Products
                 Description = product.Description,
                 Active = product.Active,
                 CreatedAt = product.CreatedAt,
-                User = user ? ResponseUserDTO.fromDomain(product.User) : null
+                User = user != null ? ResponseUserDTO.fromDomain(user!):null
             };
         }
     }

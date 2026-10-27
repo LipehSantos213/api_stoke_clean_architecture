@@ -44,7 +44,7 @@ namespace api_stoke.Application.DTOs.CartItens
                 CreatedAt = cartItem.CreatedAt,
                 UpdatedAt = cartItem.UpdatedAt,
                 Product = product ?
-                    ResponseProductDTO.fromDomain(cartItem.Product, false) :
+                    ResponseProductDTO.fromDomain(cartItem.Product) :
                     null,
                 Skus = s
             };

@@ -32,7 +32,7 @@ namespace api_stoke.Application.UseCases.Products
 
             var res = await _repository.Update(product);
 
-            return ResponseProductDTO.fromDomain(res, true);
+            return ResponseProductDTO.fromDomain(res);
         }
     }
 }
