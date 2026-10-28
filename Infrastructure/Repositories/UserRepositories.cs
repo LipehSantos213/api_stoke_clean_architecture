@@ -37,6 +37,7 @@ namespace api_stoke.Infrastructure.Repositories
                 .SetProperty(u=>u.Name, user.Name)
                 .SetProperty(u=>u.Email, user.Email)
                 .SetProperty(u=>u.Password, user.Password)
+                .SetProperty(u=>u.UpdatedAt, user.UpdatedAt)
                 );
 
             return (await GetById(user.Id))!;
