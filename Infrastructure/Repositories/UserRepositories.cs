@@ -36,6 +36,7 @@ namespace api_stoke.Infrastructure.Repositories
             await _appContext.Users.Where(u => u.Id == user.Id).ExecuteUpdateAsync(s => s
                 .SetProperty(u=>u.Name, user.Name)
                 .SetProperty(u=>u.Email, user.Email)
+                .SetProperty(u=>u.Password, user.Password)
                 );
 
             return (await GetById(user.Id))!;
