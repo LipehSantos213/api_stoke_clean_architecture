@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin2
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin2_data:/var/lib/pgadmin
+
   postgres:
     image: postgres:16-alpine
     container_name: postgres_db
@@ -16,3 +28,4 @@ services:
 
 volumes:
   postgres_data_v2:
+  pgadmin2_data:
