@@ -77,7 +77,7 @@ namespace api_stoke.Domain.Entities
             if(value == Active)
             {
                 var status = value ? "ativado" : "desativado";
-                throw new Exception($"O usuario já está {status}");
+                throw new ConflictException($"O usuario já está {status}");
             }
 
             Active = value;
