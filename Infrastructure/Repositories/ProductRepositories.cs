@@ -41,28 +41,24 @@ namespace api_stoke.Infrastructure.Repositories
             return ( await Get(product.Id) )!;
         }
 
-        public async Task<List<Product>?> GetName(Guid userId, string name)
+        public async Task<List<Product>?> GetProductsOfUser(Guid userId, string? name, bool? active, int? valueStokeMin)
         {
-            var products = await 
-                _appContext.Products
-                .Where(p => p.UserId == userId && EF.Functions.Like(p.Name, $"%{name}%")).ToListAsync();
-            return products;
-        }
+            Console.WriteLine($"[INFO] Buscando Dados dos produtos do usuario {userId}");
+            IQueryable<Product> condition = _appContext.Products.Where(p=> p.UserId == userId);
+            if(name != null)
+            {
+                condition = condition.Where(p=> EF.Functions.Like(p.Name, $"%{name}%"));
+            }
+            if(active != null)
+            {
+                condition = condition.Where(p => p.Active == active);
+            }
+            if(valueStokeMin != null)
+            {
+                condition = condition.Where(p => p.Amount <= valueStokeMin);
+            }
 
-        public async Task<List<Product>?> GetStatus(Guid userId, bool value)
-        {
-            var products = await 
-                _appContext.Products
-                .Where(p=> p.UserId == userId && p.Active == value).ToListAsync();
-            return products;
-        }
-
-        public async Task<List<Product>?> GetStokeMin(Guid userId, int stokeMin)
-        {
-            var products = await 
-                _appContext.Products
-                .Where(p=> p.UserId == userId && p.Amount <= stokeMin).ToListAsync();
-            return products;
+            return await condition.ToListAsync();
         }
     }
 }
