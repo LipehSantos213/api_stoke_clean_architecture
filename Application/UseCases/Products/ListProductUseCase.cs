@@ -1,4 +1,5 @@
 ﻿using api_stoke.Application.DTOs.Products;
+using api_stoke.Application.Exceptions;
 using api_stoke.Domain.Entities;
 using api_stoke.Domain.Interfaces;
 
@@ -13,41 +14,36 @@ namespace api_stoke.Application.UseCases.Products
             _repository = repository;
         }
 
-        private void AddProducts(List<ResponseProductDTO> products, List<Product> productsAdd)
+        private List<ResponseProductDTO> AddProducts(List<ResponseProductDTO> products, List<Product> productsAdd)
         {
-            foreach(var e in productsAdd)
+            Console.WriteLine("[INFO] Adicionando produtos buscados do banco");
+            foreach(Product e in productsAdd)
             {
-                var p = ResponseProductDTO.fromDomain(e);
-                if(!products.Contains(p))
+                ResponseProductDTO p = ResponseProductDTO.fromDomain(e);
+                if(!products.Exists(i=> i.Id == p.Id)) 
+                {
+                    Console.WriteLine($"---- [INFO] Produto '{p.Id}' adicionado !");
                     products.Add(p);
+                }
             }
+            return products;
         }
 
         public async Task<List<ResponseProductDTO>> Execute(Guid userId, string? name, bool? active, int? valueStokeMin)
         {
+            Console.WriteLine("[INFO] ListProductUseCase");
             List<ResponseProductDTO> products = new();
 
-            if (!(name!.Equals(null)))
+            List<Product>? allProducts = await _repository.GetProductsOfUser(userId, name, active, valueStokeMin);
+            if (allProducts != null && allProducts.Count > 0)
             {
-                var prod = await _repository.GetName(userId, name.Trim());
-                if(prod != null)
-                    AddProducts(products, prod);
+                products = AddProducts(products, allProducts);
             }
-            if (!(active!.Equals(null)))
+            else
             {
-                var prod = await _repository.GetStatus(userId, (bool)active);
-
-                if(prod != null)
-                    AddProducts(products, prod);
+                throw new NotFoundException("Nenhum produto encontrado !");
             }
-            if (!(valueStokeMin.Equals(null)))
-            {
-                var prod = await _repository.GetStokeMin(userId, (int)valueStokeMin);
-
-                if(prod != null)
-                    AddProducts(products, prod);
-            }
-
+          
             return products;
         }
     }

@@ -49,7 +49,7 @@ namespace api_stoke.Presentation.Controllers
             [FromQuery] bool? active,
             [FromQuery] int? valueStokeMin)
         {
-            var products = await _listProductUseCase.Execute(userId, name, active, valueStokeMin);
+            List<ResponseProductDTO> products = await _listProductUseCase.Execute(userId, name, active, valueStokeMin);
             return Ok(products);
         }
 
