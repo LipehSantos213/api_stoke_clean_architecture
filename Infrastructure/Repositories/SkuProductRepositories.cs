@@ -47,5 +47,11 @@ namespace api_stoke.Infrastructure.Repositories
                 _appContext.SkuProducts.Where(sk=> sk.ProductId == productId)
                 .OrderByDescending(sk=>sk.CreatedAt).FirstOrDefaultAsync();
         }
+
+        public async Task<List<SkuProduct>> ListSkuOfProduct(Guid productId)
+        {
+            Console.WriteLine($"[INFO] Buscando Skus do Produto {productId}");
+            return await _appContext.SkuProducts.Where(sk => sk.ProductId == productId).ToListAsync();
+        }
     }
 }

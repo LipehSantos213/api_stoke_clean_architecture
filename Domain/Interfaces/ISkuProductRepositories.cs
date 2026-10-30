@@ -10,6 +10,8 @@ namespace api_stoke.Domain.Interfaces
 
         Task<SkuProduct?> GetBySku(string sku);
 
+        Task<List<SkuProduct>> ListSkuOfProduct(Guid productId);
+
         Task<SkuProduct?> GetById(Guid id);
 
         Task<SkuProduct?> GetLastSku(Guid productId);
