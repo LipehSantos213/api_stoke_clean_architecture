@@ -56,7 +56,7 @@ namespace api_stoke.Presentation.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update([FromBody] UpdateProductDTO dto, [FromRoute] Guid userId,[FromRoute] Guid id)
         {
-            var product = await _updateProductUseCase.Execute(userId, id, dto);
+            ResponseProductDTO product = await _updateProductUseCase.Execute(userId, id, dto);
             return Ok(product);
         }
 
