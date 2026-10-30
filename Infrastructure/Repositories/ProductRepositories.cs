@@ -31,7 +31,6 @@ namespace api_stoke.Infrastructure.Repositories
         public async Task<Product> Update(Product product)
         {
             await _appContext.Products.Where(p => p.Id == product.Id).ExecuteUpdateAsync(p=> p
-            .SetProperty(p=>p.Name, product.Name)
             .SetProperty(p=>p.Description, product.Description)
             .SetProperty(p=>p.Price, product.Price)
             .SetProperty(p=>p.Amount, product.Amount)

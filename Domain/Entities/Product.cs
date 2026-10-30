@@ -80,11 +80,10 @@
             UpdatedAt = DateTime.UtcNow;
         }
     
-        public void Update(string? name, string? description, int? price)
+        public void Update(string? description, int? price)
         {
-            Validate(name??Name, description??Description, price??Price);
+            Validate(Name, description??Description, price??Price);
 
-            Name = name??Name;
             Description = description??Description;
             Price = price??Price;
             UpdatedAt = DateTime.UtcNow;
