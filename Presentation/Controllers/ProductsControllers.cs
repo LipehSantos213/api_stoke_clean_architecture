@@ -38,7 +38,7 @@ namespace api_stoke.Presentation.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get([FromRoute] Guid userId, [FromRoute] Guid id)
         {
-            var product = await _queryProductUseCase.Execute(userId, id);
+            ResponseProductDTO product = await _queryProductUseCase.Execute(userId, id);
             return Ok(product);
         }
 
