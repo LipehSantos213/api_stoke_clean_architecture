@@ -1,4 +1,5 @@
-﻿using api_stoke.Application.DTOs.Users;
+﻿using api_stoke.Application.DTOs.SkuProducts;
+using api_stoke.Application.DTOs.Users;
 using api_stoke.Domain.Entities;
 
 namespace api_stoke.Application.DTOs.Products
@@ -14,9 +15,11 @@ namespace api_stoke.Application.DTOs.Products
         public bool Active { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public ResponseUserDTO? User = new();
+        public ResponseUserDTO? User { get; set; } = new();
+        public List<ResponseSkuProductDTO>? Skus { get; set; } = new()!;
 
-        public static ResponseProductDTO fromDomain(Product product, User? user = null)
+        public static ResponseProductDTO fromDomain(Product product, User? user = null,
+            List<ResponseSkuProductDTO>? skus = null)
         {
             return new ResponseProductDTO
             {
@@ -28,7 +31,8 @@ namespace api_stoke.Application.DTOs.Products
                 Description = product.Description,
                 Active = product.Active,
                 CreatedAt = product.CreatedAt,
-                User = user != null ? ResponseUserDTO.fromDomain(user!):null
+                User = user != null ? ResponseUserDTO.fromDomain(user!):null,
+                Skus = skus != null? skus:null
             };
         }
     }
