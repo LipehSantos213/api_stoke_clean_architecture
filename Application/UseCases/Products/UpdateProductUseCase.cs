@@ -1,4 +1,5 @@
 ﻿using api_stoke.Application.DTOs.Products;
+using api_stoke.Application.Exceptions;
 using api_stoke.Application.Services;
 using api_stoke.Domain.Entities;
 using api_stoke.Domain.Interfaces;
@@ -26,11 +27,11 @@ namespace api_stoke.Application.UseCases.Products
             User user = await _userService.FindUser(userId);
             Product product = await _service.GetProductById(productId);
             if (user.Id != product.UserId)
-                throw new Exception("Não autorizado !");
+                throw new UnauthorizedException("Não autorizado !");
 
-            product.Update(dto.Name, dto.Description, dto.Price);
+            product.Update(dto.Description, dto.Price);
 
-            var res = await _repository.Update(product);
+            Product res = await _repository.Update(product);
 
             return ResponseProductDTO.fromDomain(res);
         }
